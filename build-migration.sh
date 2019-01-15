@@ -1,12 +1,12 @@
 #!/bin/bash
 
 timestamp=`date +%Y%M%d%H%M%S`
-echo "dump_nquads ('dumps', 1, 10000000, 1);" | docker-compose exec -T db isql-v
-rapper -i nquads -o ntriples data/db/dumps/output000001.nq > $timestamp-berichten.ttl
+echo "dump_nquads ('dumps', 1, 10000000, 0);" | docker-compose exec -T db isql-v
+grep "http://mu.semte.ch/application" data/db/dumps/output000001.nq | rapper -i nquads -o ntriples -I http://example.org -  > $timestamp-berichten.ttl
 echo "http://mu.semte.ch/graphs/import/berichten-tmp" > $timestamp-berichten.graph
+sleep 1
 timestampquery=`date +%Y%M%d%H%M%S`
-echo <<EOF > $timestampquery-berichten.sparql
-
+echo '
 INSERT {
 GRAPH ?graph {
 ?conversation ?p ?o.
@@ -36,10 +36,9 @@ GRAPH <http://mu.semte.ch/graphs/public> {
 }
 };
 
-DROP SILENT GRAPH <http://mu.semte.ch/graphs/import/berichten-tmp>
-EOF
+DROP SILENT GRAPH <http://mu.semte.ch/graphs/import/berichten-tmp> ' > $timestampquery-berichten.sparql
 
-zip $timestamp-berichten.zip $timestamp-berichten.* $timestampquery-berichten.sparql data/files/*pdf
+zip $timestamp-berichten-package.zip $timestamp-berichten.* $timestampquery-berichten.sparql data/files/*pdf
 rm -rf data/files $timestamp-berichten.* $timestampquery-berichten.sparql
 docker-compose down
 rm -rf data/db
