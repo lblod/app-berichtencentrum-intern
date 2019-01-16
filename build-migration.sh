@@ -1,11 +1,9 @@
 #!/bin/bash
-
-timestamp=`date +%Y%M%d%H%M%S`
-echo "dump_nquads ('dumps', 1, 10000000, 0);" | docker-compose exec -T db isql-v
-grep "http://mu.semte.ch/application" data/db/dumps/output000001.nq | rapper -i nquads -o ntriples -I http://example.org -  > $timestamp-berichten.ttl
+timestamp=`date +%Y%m%d%H%M%S`
+wget 'http://localhost:8890/sparql?default-graph-uri=&query=CONSTRUCT+%7B%0D%0A++%3Fconversation+%3Fp+%3Fo.%0D%0A++%3Fconversation+%3Chttp%3A%2F%2Fschema.org%2FhasPart%3E+%3Fmessage.%0D%0A++%3Fmessage+%3Fmp+%3Fmo.%0D%0A++%3Fpart+%3Fpp+%3Fpo.%0D%0A++%3Ffile+%3Ffp+%3Ffo.%0D%0A%7D%0D%0A+WHERE+%7B%0D%0AGRAPH+%3Chttp%3A%2F%2Fmu.semte.ch%2Fapplication%3E+%7B%0D%0A++%3Fconversation+%3Fp+%3Fo.%0D%0A++%3Fconversation+%3Chttp%3A%2F%2Fschema.org%2FhasPart%3E+%3Fmessage.%0D%0A++%3Fmessage+%3Fmp+%3Fmo.%0D%0A++%3Fmessage+%3Chttp%3A%2F%2Fschema.org%2Frecipient%3E+%3Fbestuur.%0D%0A++++OPTIONAL+%7B%0D%0A++++++%3Fmessage+%3Chttp%3A%2F%2Fwww.semanticdesktop.org%2Fontologies%2F2007%2F01%2F19%2Fnie%23hasPart%3E+%3Fpart.%0D%0A++++++%3Fpart+%3Fpp+%3Fpo.%0D%0A++++++%3Ffile+%3Chttp%3A%2F%2Fwww.semanticdesktop.org%2Fontologies%2F2007%2F01%2F19%2Fnie%23dataSource%3E+%3Fpart%3B%0D%0A++++++++++++%3Ffp+%3Ffo.%0D%0A%7D%0D%0A%7D%0D%0A%7D&should-sponge=&format=text%2Fplain&timeout=0&debug=on&run=+Run+Query+' -O $timestamp-berichten.ttl
 echo "http://mu.semte.ch/graphs/import/berichten-tmp" > $timestamp-berichten.graph
 sleep 1
-timestampquery=`date +%Y%M%d%H%M%S`
+timestampquery=`date +%Y%m%d%H%M%S`
 echo '
 INSERT {
 GRAPH ?graph {
@@ -41,4 +39,4 @@ DROP SILENT GRAPH <http://mu.semte.ch/graphs/import/berichten-tmp> ' > $timestam
 zip $timestamp-berichten-package.zip $timestamp-berichten.* $timestampquery-berichten.sparql data/files/*pdf
 rm -rf data/files $timestamp-berichten.* $timestampquery-berichten.sparql
 docker-compose down
-rm -rf data/db
+rm -rf data/db/virtuoso* data/db/.dba_pwd_set data/db/.data_loaded && git checkout virtuoso.ini

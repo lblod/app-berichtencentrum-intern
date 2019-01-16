@@ -113,3 +113,23 @@
   :resource-base (s-url "http://data.lblod.info/files/")
   :features `(no-pagination-defaults include-uri)
   :on-path "files")
+
+
+(define-resource bestuurseenheid ()
+  :class (s-prefix "besluit:Bestuurseenheid")
+  :properties `((:naam :string ,(s-prefix "skos:prefLabel")))
+  :has-one `((bestuurseenheid-classificatie-code :via ,(s-prefix "besluit:classificatie")
+                                                 :as "classificatie"))
+  :resource-base (s-url "http://data.lblod.info/id/bestuurseenheden/")
+  :features '(include-uri)
+  :on-path "bestuurseenheden"
+)
+
+
+(define-resource bestuurseenheid-classificatie-code ()
+  :class (s-prefix "ext:BestuurseenheidClassificatieCode")
+  :properties `((:label :string ,(s-prefix "skos:prefLabel"))
+                (:scope-note :string ,(s-prefix "skos:scopeNote")))
+  :resource-base (s-url "http://data.vlaanderen.be/id/concept/BestuurseenheidClassificatieCode/")
+  :features '(include-uri)
+  :on-path "bestuurseenheid-classificatie-codes")
