@@ -4,7 +4,7 @@
 git clone https://github.com/lblod/frontend-berichten-intern 
 git clone http://github.com/lblod/batch-inzendingen-service
 git clone https://github.com/lblod/app-berichtencentrum-intern
-push lblod/batch-inzendingen-service
+pushd lblod/batch-inzendingen-service
 docker build -t lblod/batch-inzendingen-service .
 popd
 pushd app-berichtencentrum-intern
