@@ -16,7 +16,7 @@ eds --proxy http://host
 popd
 ```
 1. Open http://localhost:4200
-2. Upload a csv with the following headers `Dossiernummer,Type communicatie,Betreft,Afdeling/Team,bestuur,BestuurseenheidURI,Datum verzending,Bijlagen
-`
-3. Refresh and add files to the messages
+2. Upload a **CSV** with the following headers `Dossiernummer,Type communicatie,Betreft,Afdeling/Team,bestuur,BestuurseenheidURI,Datum verzending,Bijlagen
+` Make sure all columns are filled.
+3. Refresh and upload the files to the messages
 4. Run ./build-migration.sh to create zip with files and migration files
