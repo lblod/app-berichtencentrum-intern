@@ -11,6 +11,7 @@ pushd app-berichtencentrum-intern
 drc up -d
 popd
 pushd frontend-berichten-intern
+edi npm install
 eds --proxy http://host
 popd
 ```
