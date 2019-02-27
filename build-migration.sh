@@ -36,7 +36,7 @@ GRAPH <http://mu.semte.ch/graphs/public> {
 
 DROP SILENT GRAPH <http://mu.semte.ch/graphs/import/berichten-tmp> ' > $timestampquery-berichten.sparql
 
-zip $timestamp-berichten-package.zip $timestamp-berichten.* $timestampquery-berichten.sparql data/files/*pdf
+zip $timestamp-berichten-package.zip $timestamp-berichten.* $timestampquery-berichten.sparql data/files/*
 rm -rf data/files $timestamp-berichten.* $timestampquery-berichten.sparql
 docker-compose down
 rm -rf data/db/virtuoso* data/db/.dba_pwd_set data/db/.data_loaded && git checkout virtuoso.ini
